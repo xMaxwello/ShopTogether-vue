@@ -1,56 +1,30 @@
+<script setup lang="ts">
+import { IonContent, IonPage } from '@ionic/vue';
+</script>
+
+
+
 <template>
   <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-title>Blank</ion-title>
-      </ion-toolbar>
-    </ion-header>
-
     <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Blank</ion-title>
-        </ion-toolbar>
-      </ion-header>
 
-      <div id="container">
-        <strong>Ready to create an app?</strong>
-        <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+      <div class="flex flex-col justify-center items-center pt-24">
+        <span class="text-[40px]">ShopTogether</span>
+
+        <div class="flex flex-col w-[321px] h-auto py-4 bg-loginCard rounded-2xl items-center px-8 mt-24">
+          <span class="text-black text-[24px]">Anmeldung</span>
+          <ion-input label="E-Mail" label-placement="floating" type="text" class="text-gray-500 mb-2"/>
+          <ion-input label="Passwort" label-placement="floating" type="password" class="text-gray-500 mb-2"/>
+
+          <div class="flex flex-col">
+            <button class="bg-confirmButton text-white rounded-[24px] w-[161px] h-[35px] mb-2">Anmelden</button>
+            <button class="bg-white text-confirmButton rounded-[24px] w-[161px] h-[35px]">Registrieren</button>
+          </div>
+
+        </div>
+
       </div>
     </ion-content>
   </ion-page>
 </template>
 
-<script setup lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
-</script>
-
-<style scoped>
-#container {
-  text-align: center;
-  
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
-}
-
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-  
-  color: #8c8c8c;
-  
-  margin: 0;
-}
-
-#container a {
-  text-decoration: none;
-}
-</style>
