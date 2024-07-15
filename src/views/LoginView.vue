@@ -8,8 +8,8 @@ import { IonContent, IonPage } from '@ionic/vue';
   <ion-page>
     <ion-content :fullscreen="true">
 
-      <div class="flex flex-col justify-center items-center pt-24">
-        <span class="text-[40px]">ShopTogether</span>
+      <div class="flex w-full h-full flex-col items-center pt-24 bg-white">
+        <span class="text-[40px] text-black">ShopTogether</span>
 
         <div class="flex flex-col w-[321px] h-auto py-4 bg-loginCard rounded-2xl items-center px-8 mt-24">
           <span class="text-black text-[24px]">Anmeldung</span>
