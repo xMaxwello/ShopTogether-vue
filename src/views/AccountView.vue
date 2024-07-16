@@ -1,6 +1,14 @@
 <script setup lang="ts">
 import {IonContent, IonPage} from "@ionic/vue";
+import DialogCard from "@/compontents/dialogComponent/DialogCard.vue";
 import router from "@/router";
+import {ref} from "vue";
+
+const isCardVisible = ref(false);
+
+const toggleCard = () => {
+  isCardVisible.value = !isCardVisible.value;
+};
 
 const goToSettings = () => {
   router.push('/settings');
@@ -16,7 +24,7 @@ const goToSettings = () => {
 
 
         <div class="flex flex-col w-full justify-between text-gray-700">
-          <button class=" text-white rounded-[24px] w-full h-[43px] my-8 flex flex-row items-center justify-between">
+          <button @click="toggleCard" class=" text-white rounded-[24px] w-full h-[43px] my-8 flex flex-row items-center justify-between">
             <span class="text-gray-600">Name ändern</span>
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M13.5 0L11.25 2.25L15.75 6.75L18 4.5L13.5 0ZM9 4.5L0 13.5V18H4.5L13.5 9L9 4.5Z" fill="#757575"/>
@@ -47,6 +55,7 @@ const goToSettings = () => {
 
         <button @click="goToSettings" class="bg-confirmButton text-white rounded-[24px] w-[180px] h-[43px] mb-2">Zurück</button>
 
+        <DialogCard v-if="isCardVisible" />
 
       </div>
 

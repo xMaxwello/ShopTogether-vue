@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { IonContent, IonPage } from '@ionic/vue';
+import { IonContent, IonPage, IonIcon } from '@ionic/vue';
 import GroupCard from "@/compontents/GroupCard.vue";
 import router from "@/router";
+import {add} from "ionicons/icons";
 
 
 const goToList = () => {
@@ -19,6 +20,12 @@ const goToList = () => {
         <GroupCard/>
 
       </div>
+
+      <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+        <ion-fab-button>
+          <ion-icon :icon="add"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
 
     </ion-content>
   </ion-page>
