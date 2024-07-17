@@ -1,5 +1,21 @@
 <script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import { getCurrentUser } from '@/services/authService';
 
+const user = ref({ firstName: '', lastName: '' });
+
+const fetchUser = async () => {
+  try {
+    const userData = await getCurrentUser();
+    user.value = userData;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+onMounted(() => {
+  fetchUser();
+});
 </script>
 
 <template>
@@ -7,7 +23,7 @@
 
     <div class="flex flex-col w-full">
       <div class="flex justify-start">
-        <span class="text-[24px]">Vorname Nachname</span>
+        <span class="text-[24px]">{{ user.firstName }} {{ user.lastName }}</span>
       </div>
 
       <div class="flex flex-row items-center justify-between">

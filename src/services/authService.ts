@@ -1,5 +1,5 @@
-import { createUserWithEmailAndPassword , signInWithEmailAndPassword ,signOut} from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
+import { createUserWithEmailAndPassword , signInWithEmailAndPassword ,signOut, onAuthStateChanged } from 'firebase/auth';
+import { doc, setDoc, onSnapshot  } from 'firebase/firestore';
 import { auth, db } from '../../firebaseConfig';
 
 const registerUser = async (email, password, firstName, lastName) => {
@@ -32,6 +32,25 @@ const loginUser = async (email, password) => {
     }
 };
 
+const getCurrentUser = () => {
+    return new Promise((resolve, reject) => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const userDocRef = doc(db, 'users', user.uid);
+                onSnapshot(userDocRef, (docSnapshot) => {
+                    if (docSnapshot.exists()) {
+                        resolve(docSnapshot.data());
+                    } else {
+                        reject('User document not found');
+                    }
+                });
+            } else {
+                reject('No user is currently logged in');
+            }
+        });
+    });
+};
+
 const logoutUser = async () => {
     try {
         await signOut(auth);
@@ -40,4 +59,4 @@ const logoutUser = async () => {
     }
 };
 
-export { registerUser, logoutUser, loginUser };
+export { registerUser, logoutUser, loginUser, getCurrentUser };
