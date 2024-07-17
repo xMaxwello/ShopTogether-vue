@@ -3,11 +3,26 @@
 import {IonContent, IonPage} from "@ionic/vue";
 import AccountCard from "@/compontents/AccountCard.vue";
 import router from "@/router";
+import {logoutUser} from "@/services/authService";
+import {ref} from "vue";
+
+const toastMessage = ref('');
 
 
 const goToAccount = () => {
   router.push('/account')
 }
+
+
+const handleLogout = async () => {
+  try {
+    await logoutUser();
+    toastMessage.value = 'Successfully logged out!';
+    await router.push('/login');
+  } catch (error) {
+    toastMessage.value = error.message;
+  }
+};
 </script>
 
 <template>
@@ -29,7 +44,7 @@ const goToAccount = () => {
         <ion-toggle class="pb-16">Dark Theme</ion-toggle>
         </div>
 
-        <button class="bg-confirmButton text-white rounded-[24px] w-[180px] h-[43px] mb-2">Abmelden</button>
+        <button @click="handleLogout" class="bg-confirmButton text-white rounded-[24px] w-[180px] h-[43px] mb-2">Abmelden</button>
 
 
       </div>

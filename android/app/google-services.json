@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "48337489018",
+    "project_id": "vue-shoptogether",
+    "storage_bucket": "vue-shoptogether.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:48337489018:android:842cc5d1d8fa5f85debfc3",
+        "android_client_info": {
+          "package_name": "io.ionic.starter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_06sUrIxkE1sEMC-_KGd5gT2ZlQvbKqI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
