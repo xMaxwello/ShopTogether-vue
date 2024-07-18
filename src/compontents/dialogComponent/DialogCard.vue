@@ -1,37 +1,29 @@
-<script lang="ts" setup>
+<script setup lang="ts">
+import { defineProps, defineEmits } from 'vue';
+import ChangeNameDialog from '@/compontents/dialogComponent/dialogs/ChangeNameDialog.vue';
+import ChangeEmailDialog from '@/compontents/dialogComponent/dialogs/ChangeEmailDialog.vue';
+import ChangePasswordDialog from '@/compontents/dialogComponent/dialogs/ChangePasswordDialog.vue';
+import DeleteAccountDialog from '@/compontents/dialogComponent/dialogs/DeleteAccountDialog.vue';
 
+const props = defineProps({
+  actionType: {
+    type: String,
+    required: true
+  }
+});
+
+const emit = defineEmits(['close']);
+
+const closeDialog = () => {
+  emit('close');
+};
 </script>
 
 <template>
-  <div class="w-[375px] rounded-3xl z-10 h-auto bg-loginCard">
-    <div class="p-6">
-      <h1 class="text-black text-xl">Name ändern</h1>
-      <ion-input
-          label="Vorname"
-          label-placement="floating"
-          type="text"
-          class="text-gray-500 mb-2"
-      />
-      <ion-input
-          label="Nachname"
-          label-placement="floating"
-          type="text"
-          class="text-gray-500 mb-2"
-      />
-      <ion-input
-          label="Passwort"
-          label-placement="floating"
-          type="password"
-          class="text-gray-500 mb-2"
-      />
-      <div class="flex flex-row justify-between">
-        <button class="bg-confirmButton text-white w-[140px] h-[43px] rounded-md">
-          <span>Abbrechen</span>
-        </button>
-        <button class="bg-confirmButton text-white w-[140px] h-[43px] rounded-md">
-          <span>Bestätigen</span>
-        </button>
-      </div>
-    </div>
+  <div>
+    <ChangeNameDialog v-if="actionType === 'name'" @close="closeDialog" />
+    <ChangeEmailDialog v-if="actionType === 'email'" @close="closeDialog" />
+    <ChangePasswordDialog v-if="actionType === 'password'" @close="closeDialog" />
+    <DeleteAccountDialog v-if="actionType === 'delete'" @close="closeDialog" />
   </div>
 </template>
