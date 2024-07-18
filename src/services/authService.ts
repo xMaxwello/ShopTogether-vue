@@ -2,7 +2,7 @@ import { createUserWithEmailAndPassword , signInWithEmailAndPassword ,signOut, o
 import { doc, setDoc, onSnapshot  } from 'firebase/firestore';
 import { auth, db } from '../../firebaseConfig';
 
-const registerUser = async (email, password, firstName, lastName) => {
+const registerUser = async (email: string, password: string, firstName: string, lastName: string) => {
     if (!firstName || !lastName || !email || !password) {
         throw new Error('All fields are required');
     }
@@ -23,7 +23,7 @@ const registerUser = async (email, password, firstName, lastName) => {
     }
 };
 
-const loginUser = async (email, password) => {
+const loginUser = async (email: string, password: string) => {
     try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         return userCredential.user;

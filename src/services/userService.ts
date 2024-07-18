@@ -2,7 +2,7 @@ import { updateEmail, updatePassword, reauthenticateWithCredential, EmailAuthPro
 import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { auth, db } from '../../firebaseConfig';
 
-const updateUserProfile = async (uid, firstName, lastName) => {
+const updateUserProfile = async (uid: string, firstName: string, lastName: string) => {
     try {
         console.log(`Updating user profile: UID=${uid}, FirstName=${firstName}, LastName=${lastName}`);
         const userDocRef = doc(db, 'users', uid);
@@ -12,7 +12,7 @@ const updateUserProfile = async (uid, firstName, lastName) => {
     }
 };
 
-const reauthenticateUser = async (currentEmail, password) => {
+const reauthenticateUser = async (currentEmail: string, password: string) => {
     const user = auth.currentUser;
     const credential = EmailAuthProvider.credential(currentEmail, password);
     try {
@@ -22,7 +22,7 @@ const reauthenticateUser = async (currentEmail, password) => {
     }
 };
 
-const updateUserEmail = async (newEmail) => {
+const updateUserEmail = async (newEmail: string) => {
     const user = auth.currentUser;
     try {
         if (!user.emailVerified) {
@@ -37,7 +37,7 @@ const updateUserEmail = async (newEmail) => {
     }
 };
 
-const updateUserPassword = async (currentEmail, currentPassword, newPassword) => {
+const updateUserPassword = async (currentEmail: string, currentPassword: string, newPassword: string) => {
     const user = auth.currentUser;
     const credential = EmailAuthProvider.credential(currentEmail, currentPassword);
     try {
@@ -48,7 +48,7 @@ const updateUserPassword = async (currentEmail, currentPassword, newPassword) =>
     }
 };
 
-const deleteUserAccount = async (currentEmail, password) => {
+const deleteUserAccount = async (currentEmail: string, password: string) => {
     const user = auth.currentUser;
     const uid = user.uid;
     const credential = EmailAuthProvider.credential(currentEmail, password);
