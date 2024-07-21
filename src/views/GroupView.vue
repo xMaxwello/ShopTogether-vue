@@ -20,8 +20,8 @@ const fetchGroups = async () => {
 
 onMounted(fetchGroups);
 
-const goToList = () => {
-  router.push('/shoppinglist');
+const goToList = (groupId) => {
+  router.push(`/shoppinglist/${groupId}`);
 };
 
 const openDialog = () => {
@@ -79,7 +79,14 @@ const deleteGroup = async () => {
       <div class="w-full h-full px-4 bg-white flex flex-col items-center">
         <h1 class="text-black text-[32px] py-10">Gruppen</h1>
         <div v-for="group in groups" :key="group.groupId" class="w-full">
-          <GroupCard :groupName="group.groupName" :membersCount="group.userUUIDs.length" :itemsCount="group.products.length" :groupId="group.groupId" @longpress="showDeleteActionSheet" />
+          <GroupCard
+              :groupName="group.groupName"
+              :membersCount="group.userUUIDs.length"
+              :itemsCount="group.products.length"
+              :groupId="group.groupId"
+              @longpress="showDeleteActionSheet"
+              @click="goToList(group.groupId)"
+          />
         </div>
 
         <ion-fab slot="fixed" vertical="bottom" horizontal="end">

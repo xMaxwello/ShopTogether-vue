@@ -13,7 +13,7 @@ const createGroup = () => {
   if (groupName.value.trim()) {
     emit('createGroup', groupName.value.trim());
   } else {
-    alert('Group name cannot be empty');
+    console.log('Group name Input:', groupName.value);
   }
 };
 

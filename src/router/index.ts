@@ -18,7 +18,7 @@ const routes: Array<RouteRecordRaw> = [
     component: LoginView
   },
   {
-    path: '/shoppinglist',
+    path: '/shoppinglist/:groupId',
     name: 'Shoppinglist',
     component: ShoppinglistView
   },
@@ -50,4 +50,4 @@ const router = createRouter({
   routes
 })
 
-export default router
+export default router;

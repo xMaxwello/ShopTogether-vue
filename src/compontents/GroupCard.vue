@@ -22,7 +22,7 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['longpress']);
+const emit = defineEmits(['click', 'longpress']);
 
 let pressTimer = null;
 
@@ -35,6 +35,10 @@ const startPress = () => {
 const cancelPress = () => {
   clearTimeout(pressTimer);
 };
+
+const handleClick = () => {
+  emit('click', props.groupId);
+};
 </script>
 
 <template>
@@ -45,6 +49,7 @@ const cancelPress = () => {
       @mouseup="cancelPress"
       @mouseleave="cancelPress"
       @touchend="cancelPress"
+      @click="handleClick"
   >
     <div>
       <span class="text-[20px]">{{ groupName }}</span>
