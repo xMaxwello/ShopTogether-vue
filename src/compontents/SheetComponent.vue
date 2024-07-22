@@ -13,7 +13,6 @@ const closeModal = () => {
   isModalOpen.value = false;
 };
 
-// Expose the open and close methods to be used in the parent component
 defineExpose({
   openModal,
   closeModal,
@@ -34,11 +33,11 @@ defineExpose({
       <div class="px-4">
 
       <div class="flex flex-col items-center">
-        <h1 class="text-4xl">Item Name</h1>
-        <img src="../assets/img-placeholder.svg" alt="image">
+        <h1 class="text-4xl py-4">Item Name</h1>
+        <img class="pb-4" src="../assets/img-placeholder.svg" alt="image">
       </div>
 
-      <div class="flex flex-col">
+      <div class="flex flex-col pb-4">
         <span>Category</span>
         <span>Category</span>
         <span>Category</span>
@@ -46,11 +45,11 @@ defineExpose({
         <span>Category</span>
       </div>
 
-        <div class="justify-center px-16">
+        <div class="justify-center px-16 pb-4">
           <img src="../assets/nutri_score/Nutri-score-a.png" alt="Nutri">
         </div>
 
-        <div class="flex flex-col">
+        <div class="flex flex-col pb-4">
           <div class="flex justify-center text-3xl">
             <span>Zutaten</span>
           </div>
@@ -59,44 +58,46 @@ defineExpose({
           </span>
         </div>
 
-        <div class="flex justify-between">
-          <span>Nährwertangaben</span>
-          <span>Pro 100g</span>
-        </div>
-        <hr class="my-2">
-        <div class="flex justify-between">
-          <span>Energie</span>
-          <span>522 kcal</span>
-        </div>
-        <hr class="my-2">
-        <div class="flex justify-between">
-          <span>Fett</span>
-          <span>28.8 g</span>
-        </div>
-        <hr class="my-2">
-        <div class="flex justify-between">
-          <span>Gesättigte Fettsäuren</span>
-          <span>12.7 g</span>
-        </div>
-        <hr class="my-2">
-        <div class="flex justify-between">
-          <span>Kohlenhydrate</span>
-          <span>59 g</span>
-        </div>
-        <hr class="my-2">
-        <div class="flex justify-between">
-          <span>Zucker</span>
-          <span>48.9 g</span>
-        </div>
-        <hr class="my-2">
-        <div class="flex justify-between">
-          <span>Eiweiß</span>
-          <span>6 g</span>
-        </div>
-        <hr class="my-2">
-        <div class="flex justify-between">
-          <span>Salz</span>
-          <span>0.3 g</span>
+        <div class="pb-8">
+          <div class="flex justify-between">
+            <span>Nährwertangaben</span>
+            <span>Pro 100g</span>
+          </div>
+          <hr class="my-2">
+          <div class="flex justify-between">
+            <span>Energie</span>
+            <span>522 kcal</span>
+          </div>
+          <hr class="my-2">
+          <div class="flex justify-between">
+            <span>Fett</span>
+            <span>28.8 g</span>
+          </div>
+          <hr class="my-2">
+          <div class="flex justify-between">
+            <span>Gesättigte Fettsäuren</span>
+            <span>12.7 g</span>
+          </div>
+          <hr class="my-2">
+          <div class="flex justify-between">
+            <span>Kohlenhydrate</span>
+            <span>59 g</span>
+          </div>
+          <hr class="my-2">
+          <div class="flex justify-between">
+            <span>Zucker</span>
+            <span>48.9 g</span>
+          </div>
+          <hr class="my-2">
+          <div class="flex justify-between">
+            <span>Eiweiß</span>
+            <span>6 g</span>
+          </div>
+          <hr class="my-2">
+          <div class="flex justify-between">
+            <span>Salz</span>
+            <span>0.3 g</span>
+          </div>
         </div>
 
       </div>

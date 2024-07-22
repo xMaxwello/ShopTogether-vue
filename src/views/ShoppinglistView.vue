@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { IonContent, IonPage, IonSearchbar, IonList, IonItem, IonLabel, IonImg } from '@ionic/vue';
+import { IonContent, IonPage, IonSearchbar } from '@ionic/vue';
 import ItemCard from '@/compontents/ItemCard.vue';
 import SheetComponent from '@/compontents/SheetComponent.vue';
+import SearchResultsModal from '@/compontents/SearchResultComponent.vue';
 import { searchProducts } from '@/services/openFoodFactsService';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/../firebaseConfig';
@@ -13,6 +14,7 @@ const groupId = route.params.groupId;
 const groupData = ref(null);
 const searchQuery = ref('');
 const searchResults = ref([]);
+const isModalOpen = ref(false);
 
 const fetchGroupData = async () => {
   console.log('Fetching group data for groupId:', groupId); // Debug log
@@ -33,14 +35,22 @@ const fetchGroupData = async () => {
 const performSearch = async () => {
   if (searchQuery.value.trim() === '') {
     searchResults.value = [];
+    isModalOpen.value = false;
     return;
   }
 
   try {
     const data = await searchProducts(searchQuery.value);
     searchResults.value = data;
+    isModalOpen.value = true;
   } catch (error) {
     console.error('Error searching products:', error);
+  }
+};
+
+const handleKeyPress = (event) => {
+  if (event.key === 'Enter') {
+    performSearch();
   }
 };
 
@@ -50,6 +60,10 @@ const openModal = () => {
   if (modalRef.value) {
     modalRef.value.openModal();
   }
+};
+
+const closeModal = () => {
+  isModalOpen.value = false;
 };
 
 onMounted(fetchGroupData);
@@ -65,22 +79,10 @@ onMounted(fetchGroupData);
             show-cancel-button="focus"
             placeholder="Search products..."
             v-model="searchQuery"
-            @ionInput="performSearch"
+            @keydown="handleKeyPress"
         />
 
-        <ion-list v-if="searchResults.length > 0">
-          <ion-item v-for="product in searchResults" :key="product.code">
-            <div class="flex flex-row items-center justify-between w-full">
-              <div class="flex flex-col">
-                <h2>{{ product.product_name }}</h2>
-                <p>{{ product.brands }}</p>
-              </div>
-              <div class="w-[80px] h-[80px]">
-                <img :src="product.image_url" alt="item" class="product-image"/>
-              </div>
-            </div>
-          </ion-item>
-        </ion-list>
+        <SearchResultsModal :isOpen="isModalOpen" :results="searchResults" @close="closeModal"/>
 
         <button @click="openModal" class="w-full"><ItemCard/></button>
         <ItemCard/>
@@ -100,5 +102,12 @@ ion-searchbar.custom {
   --clear-button-color: #000;
   --border-width: 2px;
   --border-radius: 24px;
+}
+
+.product-image {
+  width: 100px; /* Adjust as needed */
+  height: auto;
+  max-height: 100px; /* Adjust as needed */
+  object-fit: cover;
 }
 </style>
