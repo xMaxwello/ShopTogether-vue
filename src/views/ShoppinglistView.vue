@@ -10,10 +10,13 @@ import { getCurrentUser } from '@/services/authService';
 import { searchProducts, fetchProductDetails } from '@/services/openFoodFactsService';
 import { trash } from "ionicons/icons";
 import type { Item } from '@/models/myItem';
+import {doc, getDoc} from "firebase/firestore";
+import {db} from "../../firebaseConfig";
 
 
 const route = useRoute();
 const groupId = route.params.groupId as string;
+const groupName = ref('');
 const searchQuery = ref('');
 const isModalOpen = ref(false);
 const items = ref<Item[]>([]);
@@ -29,6 +32,18 @@ const fetchGroupItems = async () => {
     items.value = await fetchItems(groupId);
   } catch (error) {
     console.error('Error fetching items:', error);
+  }
+};
+
+const fetchGroupDetails = async () => {
+  try {
+    const groupDocRef = doc(db, 'groups', groupId);
+    const groupDoc = await getDoc(groupDocRef);
+    if (groupDoc.exists()) {
+      groupName.value = groupDoc.data().groupName;
+    }
+  } catch (error) {
+    console.error('Error fetching group details:', error);
   }
 };
 
@@ -107,6 +122,7 @@ const openDetailModal = async (item: Item) => {
 };
 
 onMounted(async () => {
+  await fetchGroupDetails();
   await fetchGroupItems();
 });
 </script>
@@ -115,7 +131,7 @@ onMounted(async () => {
   <ion-page>
     <ion-content>
       <div class="w-full h-full px-4 bg-white flex flex-col items-center">
-        <h1 class="text-black text-[32px] py-10">Group Items</h1>
+        <h1 class="text-black text-[32px] py-10">{{ groupName }}</h1>
         <ion-searchbar
             class="custom w-full my-4 text-black"
             show-cancel-button="focus"

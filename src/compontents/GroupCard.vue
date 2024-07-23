@@ -70,9 +70,3 @@ const handleClick = () => {
     </div>
   </div>
 </template>
-
-<style scoped>
-.dialog-card {
-  background-color: rgba(0, 0, 0, 0.5);
-}
-</style>
