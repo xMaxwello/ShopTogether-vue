@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { defineProps, defineEmits } from 'vue';
-import { IonModal, IonContent, IonList, IonItem, IonLabel, IonImg, IonHeader, IonToolbar, IonTitle, IonButton } from '@ionic/vue';
+import { IonModal, IonHeader, IonToolbar, IonTitle, IonButton, IonContent, IonList, IonItem, IonImg } from '@ionic/vue';
 
 const props = defineProps({
   isOpen: {
@@ -13,10 +13,14 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'add']);
 
 const closeModal = () => {
   emit('close');
+};
+
+const addItem = (item) => {
+  emit('add', item);
 };
 </script>
 
@@ -39,6 +43,7 @@ const closeModal = () => {
             <div class="flex-shrink-0">
               <ion-img :src="product.image_url" alt="item" class="product-image"/>
             </div>
+            <ion-button @click="addItem(product)">Add</ion-button>
           </div>
         </ion-item>
       </ion-list>
@@ -48,9 +53,9 @@ const closeModal = () => {
 
 <style scoped>
 .product-image {
-  width: 100px; /* Adjust as needed */
+  width: 100px;
   height: auto;
-  max-height: 100px; /* Adjust as needed */
+  max-height: 100px;
   object-fit: cover;
 }
 </style>

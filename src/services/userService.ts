@@ -1,6 +1,7 @@
-import { updateEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider, deleteUser, sendEmailVerification  } from 'firebase/auth';
+import { updateEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider, deleteUser, sendEmailVerification } from 'firebase/auth';
 import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { auth, db } from '../../firebaseConfig';
+import type { User } from '@/models/myUser';
 
 const updateUserProfile = async (uid: string, firstName: string, lastName: string) => {
     try {
@@ -64,4 +65,4 @@ const deleteUserAccount = async (currentEmail: string, password: string) => {
     }
 };
 
-export { updateUserProfile, updateUserEmail, updateUserPassword, deleteUserAccount , reauthenticateUser};
+export { updateUserProfile, updateUserEmail, updateUserPassword, deleteUserAccount, reauthenticateUser };
