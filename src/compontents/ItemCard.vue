@@ -64,13 +64,13 @@ const decrementCount = (event) => {
     <div class="flex flex-row">
       <div class="flex flex-row pr-4 items-center">
         <button @click="decrementCount">
-          <svg width="17" height="2" viewBox="0 0 17 2" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="17" height="60" viewBox="0 0 17 2" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M1 1H16" stroke="#424242" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
         <span class="pl-1 text-[20px] text-gray-700 mx-4">{{ item.productCount }}</span>
         <button @click="incrementCount">
-          <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="17" height="60" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M1 8.5H8.5M8.5 8.5H16M8.5 8.5V1M8.5 8.5V16" stroke="#424242" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
