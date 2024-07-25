@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { IonContent, IonPage } from '@ionic/vue';
-import DialogComponent from '@/compontents/dialogComponent/DialogCard.vue';
+import DialogComponent from '@/components/dialogComponent/DialogCard.vue';
 import router from '@/router';
 import { ref } from 'vue';
 

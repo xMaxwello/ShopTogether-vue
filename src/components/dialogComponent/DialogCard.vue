@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { defineProps, defineEmits } from 'vue';
-import ChangeNameDialog from '@/compontents/dialogComponent/dialogs/ChangeNameDialog.vue';
-import ChangeEmailDialog from '@/compontents/dialogComponent/dialogs/ChangeEmailDialog.vue';
-import ChangePasswordDialog from '@/compontents/dialogComponent/dialogs/ChangePasswordDialog.vue';
-import DeleteAccountDialog from '@/compontents/dialogComponent/dialogs/DeleteAccountDialog.vue';
+import ChangeNameDialog from '@/components/dialogComponent/dialogs/ChangeNameDialog.vue';
+import ChangeEmailDialog from '@/components/dialogComponent/dialogs/ChangeEmailDialog.vue';
+import ChangePasswordDialog from '@/components/dialogComponent/dialogs/ChangePasswordDialog.vue';
+import DeleteAccountDialog from '@/components/dialogComponent/dialogs/DeleteAccountDialog.vue';
 
 const props = defineProps({
   actionType: {

@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { IonContent, IonPage, IonSearchbar, IonActionSheet } from '@ionic/vue';
-import ItemCard from '@/compontents/ItemCard.vue';
-import SheetComponent from '@/compontents/SheetComponent.vue';
-import SearchResultsModal from '@/compontents/SearchResultComponent.vue';
+import { IonContent, IonPage, IonSearchbar, IonActionSheet, IonFab, IonFabButton, IonIcon } from '@ionic/vue';
+import ItemCard from '@/components/ItemCard.vue';
+import SheetComponent from '@/components/SheetComponent.vue';
+import SearchResultsModal from '@/components/SearchResultComponent.vue';
 import { fetchItems, addItemToGroup, updateItemCount, deleteItem } from '@/services/itemService';
 import { getCurrentUser } from '@/services/authService';
 import { searchProducts, fetchProductDetails } from '@/services/openFoodFactsService';
-import { trash } from "ionicons/icons";
+import { trash, camera } from "ionicons/icons";
 import type { Item } from '@/models/myItem';
-import {doc, getDoc} from "firebase/firestore";
-import {db} from "../../firebaseConfig";
-
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../firebaseConfig";
+import {BarcodeScanner} from "@capacitor-mlkit/barcode-scanning";
 
 const route = useRoute();
 const groupId = route.params.groupId as string;
@@ -24,8 +24,8 @@ const showActionSheet = ref(false);
 const selectedItemID = ref<string | null>(null);
 const selectedProduct = ref<Item | null>(null);
 const searchResults = ref([]);
-
 const sheetComponentRef = ref(null);
+const scanning = ref(false);
 
 const fetchGroupItems = async () => {
   try {
@@ -84,7 +84,6 @@ const addItem = async (item) => {
   }
 };
 
-
 const showDeleteActionSheet = (productId: string) => {
   selectedItemID.value = productId;
   showActionSheet.value = true;
@@ -119,6 +118,32 @@ const openDetailModal = async (item: Item) => {
   } catch (error) {
     console.error('Error fetching product details:', error);
   }
+};
+
+const startScan = async () => {
+  document.body.classList.add('barcode-scanner-active');
+  try {
+    const result = await BarcodeScanner.scan();
+    console.log('Scanned barcode:', result);
+    // Process the result or store it as needed
+  } catch (error) {
+    console.error('Scanning failed:', error);
+  } finally {
+    document.body.classList.remove('barcode-scanner-active');
+    scanning.value = false;
+  }
+};
+
+const checkAndStartScan = async () => {
+  const status = await BarcodeScanner.checkPermissions();
+  if (status.camera !== 'granted') {
+    const requestStatus = await BarcodeScanner.requestPermissions();
+    if (requestStatus.camera !== 'granted') {
+      console.error('Camera permission is not granted');
+      return;
+    }
+  }
+  startScan();
 };
 
 onMounted(async () => {
@@ -164,6 +189,12 @@ onMounted(async () => {
         ]"
       ></ion-action-sheet>
 
+      <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button @click="checkAndStartScan">
+          <ion-icon :icon="camera"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+
       <SheetComponent ref="sheetComponentRef" :product="selectedProduct" />
     </ion-content>
   </ion-page>
@@ -180,10 +211,7 @@ ion-searchbar.custom {
   --border-radius: 24px;
 }
 
-.product-image {
-  width: 100px;
-  height: auto;
-  max-height: 100px;
-  object-fit: cover;
+body.barcode-scanner-active *:not(.barcode-scanner-modal) {
+  display: none;
 }
 </style>

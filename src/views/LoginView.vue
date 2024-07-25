@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { IonContent, IonPage } from '@ionic/vue';
-import LoginCard from "@/compontents/loginCard.vue";
+import LoginCard from "@/components/loginCard.vue";
 </script>
 
 

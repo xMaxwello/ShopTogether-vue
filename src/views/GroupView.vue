@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { IonContent, IonPage, IonIcon, IonActionSheet } from '@ionic/vue';
-import GroupCard from "@/compontents/GroupCard.vue";
-import NewGroupDialog from "@/compontents/NewGroupDialog.vue";
+import GroupCard from "@/components/GroupCard.vue";
+import NewGroupDialog from "@/components/NewGroupDialog.vue";
 import router from "@/router";
 import { add, trash } from "ionicons/icons";
 import { ref, onMounted } from 'vue';

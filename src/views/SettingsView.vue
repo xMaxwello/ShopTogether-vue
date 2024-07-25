@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import {IonContent, IonPage} from "@ionic/vue";
-import AccountCard from "@/compontents/AccountCard.vue";
+import AccountCard from "@/components/AccountCard.vue";
 import router from "@/router";
 import {logoutUser} from "@/services/authService";
 import {ref} from "vue";
