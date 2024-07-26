@@ -25,7 +25,7 @@ const selectedItemID = ref<string | null>(null);
 const selectedProduct = ref<Item | null>(null);
 const searchResults = ref([]);
 const sheetComponentRef = ref(null);
-const scanning = ref(false);
+const openedByScan = ref(false);
 
 const fetchGroupItems = async () => {
   try {
@@ -133,6 +133,7 @@ const startScan = async () => {
       const productDetails = await fetchProductDetails(barcode);
       if (productDetails) {
         selectedProduct.value = { ...productDetails, barcode };
+        openedByScan.value = true;
         sheetComponentRef.value.openModal();
       } else {
         console.log('Product details not found for barcode:', barcode);
@@ -208,7 +209,7 @@ onMounted(async () => {
         </ion-fab-button>
       </ion-fab>
 
-      <SheetComponent ref="sheetComponentRef" :product="selectedProduct" />
+      <SheetComponent ref="sheetComponentRef" :product="selectedProduct" :add-item="addItem" :openedByScan="openedByScan" @close="openedByScan = false" />
     </ion-content>
   </ion-page>
 </template>

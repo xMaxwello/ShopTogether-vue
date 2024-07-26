@@ -9,8 +9,12 @@ const props = defineProps({
     type: Object,
     required: false,
     default: () => ({})
-  }
+  },
+  addItem: Function,
+  openedByScan: Boolean
 });
+
+const emit = defineEmits(['close']);
 
 const isModalOpen = ref(false);
 const productDetails = ref(null);
@@ -22,6 +26,7 @@ const openModal = () => {
 
 const closeModal = () => {
   isModalOpen.value = false;
+  emit('close');
 };
 
 const fetchDetails = async (barcode) => {
@@ -30,6 +35,11 @@ const fetchDetails = async (barcode) => {
   } catch (error) {
     console.error('Failed to fetch product details:', error);
   }
+};
+
+const handleAddItem = () => {
+  props.addItem(props.product);
+  closeModal(); // Close modal after adding the item
 };
 
 watch(() => props.product, (newVal) => {
@@ -60,6 +70,7 @@ defineExpose({
           <h1 class="text-4xl py-4">{{ productDetails?.product_name || 'Item Name' }}</h1>
           <img class="pb-4" :src="productDetails?.image_url || '../assets/img-placeholder.svg'" alt="image">
         </div>
+        <ion-button v-if="props.addItem && props.openedByScan" @click="handleAddItem">Add to List</ion-button>
         <div class="flex flex-col pb-4">
           <span>Category: {{ productDetails?.categories || 'Category' }}</span>
         </div>
