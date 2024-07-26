@@ -50,9 +50,9 @@ const fetchGroupDetails = async () => {
 const handleKeyPress = async (event: KeyboardEvent) => {
   if (event.key === 'Enter') {
     try {
-      console.log('Searching for:', searchQuery.value); // Debug log
+      console.log('Searching for:', searchQuery.value);
       searchResults.value = await searchProducts(searchQuery.value);
-      console.log('Search results:', searchResults.value); // Debug log
+      console.log('Search results:', searchResults.value);
       isModalOpen.value = true;
     } catch (error) {
       console.error('Error searching products:', error);
@@ -74,11 +74,11 @@ const addItem = async (item) => {
       productID: item.code,
       productName: item.product_name,
       productImageUrl: item.image_url,
-      productVolume: item.product_volume || 'N/A', // Default value if undefined
+      productVolume: item.product_volume || 'N/A',
       selectedUserUUID: user.uid
     });
     items.value.push(newItem);
-    isModalOpen.value = false; // Close the modal after adding the item
+    isModalOpen.value = false;
   } catch (error) {
     console.error('Error adding item to group:', error);
   }
@@ -124,13 +124,26 @@ const startScan = async () => {
   document.body.classList.add('barcode-scanner-active');
   try {
     const result = await BarcodeScanner.scan();
-    console.log('Scanned barcode:', result);
-    // Process the result or store it as needed
+    console.log('Complete scan result:', JSON.stringify(result, null, 2));
+
+    if (result.barcodes && result.barcodes.length > 0) {
+      const barcode = result.barcodes[0].rawValue;
+      console.log('Scanned barcode:', barcode);
+
+      const productDetails = await fetchProductDetails(barcode);
+      if (productDetails) {
+        selectedProduct.value = { ...productDetails, barcode };
+        sheetComponentRef.value.openModal();
+      } else {
+        console.log('Product details not found for barcode:', barcode);
+      }
+    } else {
+      console.log('No valid barcode detected.');
+    }
   } catch (error) {
     console.error('Scanning failed:', error);
   } finally {
     document.body.classList.remove('barcode-scanner-active');
-    scanning.value = false;
   }
 };
 

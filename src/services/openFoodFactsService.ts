@@ -27,16 +27,15 @@ export const searchProducts = async (query: string) => {
 export const fetchProductDetails = async (barcode: string) => {
     try {
         const response = await axios.get(`https://world.openfoodfacts.org/api/v0/product/${barcode}.json`);
-        if (response.data.status === 1) {
-            return {
-                ...response.data.product,
-                product_volume: response.data.product.product_volume || 'N/A', // Ensure product_volume is always present
-            };
+        if (response.data.status === 1 && response.data.product) {
+            return response.data.product;
         } else {
-            throw new Error('Product not found');
+            console.log(`No product found for barcode: ${barcode}`);
+            return null; // Return null if no product is found
         }
     } catch (error) {
         console.error('Error fetching product details:', error);
-        throw error;
+        return null; // Ensure to return null on error to handle gracefully
     }
 };
+
