@@ -56,10 +56,11 @@ const decrementCount = (event) => {
       @click="handleClick"
   >
     <div class="flex flex-row items-center">
-      <div class="flex items-center justify-center bg-white w-[45px] h-[45px] rounded-md mr-4">
-        <img :src="item.productImageUrl" alt="item" class="product-image"/>
+      <div class="flex items-center justify-center bg-white w-[45px] min-h-[45px] h-auto rounded-md mr-4">
+        <img v-if="item.productImageUrl" :src="item.productImageUrl" alt="Product Image" class="w-[45px] h-[45px] rounded-md object-cover" />
+        <img v-else src="../assets/img-placeholder.svg" alt="Placeholder" class="w-8 h-8"/>
       </div>
-      <span class="text-[20px]">{{ item.productName }}</span>
+      <span class="text-[20px] leading-6 my-2">{{ item.productName }}</span>
     </div>
     <div class="flex flex-row">
       <div class="flex flex-row pr-4 items-center">

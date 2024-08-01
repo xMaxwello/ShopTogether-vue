@@ -19,9 +19,18 @@ const emit = defineEmits(['close']);
 const isModalOpen = ref(false);
 const productDetails = ref(null);
 
-const openModal = () => {
-  isModalOpen.value = true;
-  fetchDetails(props.product.barcode);
+
+const openModal = async () => {
+  if (props.product && props.product.barcode) {
+    productDetails.value = null; // Clear previous details
+    try {
+      productDetails.value = await fetchProductDetails(props.product.barcode);
+      isModalOpen.value = true; // Only open the modal after details are fetched
+    } catch (error) {
+      console.error('Failed to fetch product details:', error);
+      // Handle error (e.g., could show an error message or retry option)
+    }
+  }
 };
 
 const closeModal = () => {
@@ -39,12 +48,13 @@ const fetchDetails = async (barcode) => {
 
 const handleAddItem = () => {
   props.addItem(props.product);
-  closeModal(); // Close modal after adding the item
+  closeModal();
 };
 
-watch(() => props.product, (newVal) => {
-  if (newVal.barcode) {
-    fetchDetails(newVal.barcode);
+watch(() => props.product, (newProduct, oldProduct) => {
+  if (newProduct && newProduct.barcode !== oldProduct?.barcode) {
+    productDetails.value = null;
+    fetchDetails(newProduct.barcode);
   }
 });
 

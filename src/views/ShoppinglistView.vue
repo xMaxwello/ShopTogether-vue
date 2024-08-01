@@ -8,11 +8,12 @@ import SearchResultsModal from '@/components/SearchResultComponent.vue';
 import { fetchItems, addItemToGroup, updateItemCount, deleteItem } from '@/services/itemService';
 import { getCurrentUser } from '@/services/authService';
 import { searchProducts, fetchProductDetails } from '@/services/openFoodFactsService';
-import { trash, camera } from "ionicons/icons";
+import {trash, camera, add} from "ionicons/icons";
 import type { Item } from '@/models/myItem';
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import {BarcodeScanner} from "@capacitor-mlkit/barcode-scanning";
+import ManualAddModal from "@/components/ManualAddModal.vue";
 
 const route = useRoute();
 const groupId = route.params.groupId as string;
@@ -26,6 +27,19 @@ const selectedProduct = ref<Item | null>(null);
 const searchResults = ref([]);
 const sheetComponentRef = ref(null);
 const openedByScan = ref(false);
+const manualAddModalOpen = ref(false);
+
+const openManualAddModal = () => {
+  manualAddModalOpen.value = true;
+};
+
+const closeManualAddModal = () => {
+  manualAddModalOpen.value = false;
+};
+
+const handleNewItem = (newItem) => {
+  items.value.push(newItem); // Update the item list
+};
 
 const fetchGroupItems = async () => {
   try {
@@ -47,18 +61,31 @@ const fetchGroupDetails = async () => {
   }
 };
 
-const handleKeyPress = async (event: KeyboardEvent) => {
-  if (event.key === 'Enter') {
+let currentSearchRequestToken = null;
+
+const handleKeyPress = async (event) => {
+  if (event.key === 'Enter' && searchQuery.value.trim()) {
+    const searchToken = Symbol();
+    currentSearchRequestToken = searchToken;
+    console.log('Current Search Query before API call:', searchQuery.value);
     try {
-      console.log('Searching for:', searchQuery.value);
-      searchResults.value = await searchProducts(searchQuery.value);
-      console.log('Search results:', searchResults.value);
-      isModalOpen.value = true;
+      const results = await searchProducts(searchQuery.value.trim());
+      if (currentSearchRequestToken === searchToken) {
+        searchResults.value = results;
+        isModalOpen.value = true;
+        console.log('Updated Search Results:', searchResults.value);
+        console.log('Current Search Query after API call:', searchQuery.value);
+      }
     } catch (error) {
-      console.error('Error searching products:', error);
+      if (currentSearchRequestToken === searchToken) {
+        console.error('Error searching products:', error);
+      }
     }
   }
 };
+
+
+
 
 const closeModal = () => {
   isModalOpen.value = false;
@@ -179,7 +206,7 @@ onMounted(async () => {
             @keydown="handleKeyPress"
         />
 
-        <SearchResultsModal :isOpen="isModalOpen" :results="searchResults" @close="closeModal" @add="addItem"/>
+        <SearchResultsModal :isOpen="isModalOpen" :results="searchResults" :searchQuery="searchQuery" @close="closeModal" @add="addItem"/>
 
         <div v-for="item in items" :key="item.id" class="w-full">
           <ItemCard :item="item" @click="openDetailModal(item)" @longpress="showDeleteActionSheet" @update-count="handleUpdateItemCount" />
@@ -203,12 +230,19 @@ onMounted(async () => {
         ]"
       ></ion-action-sheet>
 
-      <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab vertical="bottom" horizontal="end" slot="fixed" style="bottom: 80px; right: 16px;">
+        <ion-fab-button @click="openManualAddModal">
+          <ion-icon :icon="add"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+
+      <ion-fab vertical="bottom" horizontal="end" slot="fixed" style="bottom: 16px; right: 16px;">
         <ion-fab-button @click="checkAndStartScan">
           <ion-icon :icon="camera"></ion-icon>
         </ion-fab-button>
       </ion-fab>
 
+      <ManualAddModal :is-open="manualAddModalOpen" @itemAdded="handleNewItem" @close="closeManualAddModal" />
       <SheetComponent ref="sheetComponentRef" :product="selectedProduct" :add-item="addItem" :openedByScan="openedByScan" @close="openedByScan = false" />
     </ion-content>
   </ion-page>
