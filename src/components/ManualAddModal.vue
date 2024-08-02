@@ -59,18 +59,20 @@ const saveProduct = async () => {
     </ion-header>
     <ion-content class="ion-padding">
       <ion-item>
-        <ion-label position="floating">Product Name</ion-label>
+        <ion-label position="floating" class="mb-4">Product Name</ion-label>
         <ion-input v-model="productName" type="text"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label position="floating">Product Description</ion-label>
-        <ion-input v-model="productDescription" type="text"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">Product Volume</ion-label>
+        <ion-label position="floating" class="mb-4">Product Volume</ion-label>
         <ion-input v-model="productVolume" type="text"></ion-input>
       </ion-item>
-      <ion-button expand="block" @click="saveProduct">Save Product</ion-button>
+      <ion-item>
+        <ion-label position="floating" class="mb-4">Product Description</ion-label>
+        <ion-input v-model="productDescription" type="text"></ion-input>
+      </ion-item>
+      <div class="flex justify-center">
+      <button @click="saveProduct" class="bg-confirmButton text-white rounded-[24px] w-[161px] h-[35px] mt-8">Save Product</button>
+      </div>
     </ion-content>
   </ion-modal>
 </template>
