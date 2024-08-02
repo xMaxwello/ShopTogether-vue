@@ -21,16 +21,26 @@ const productDetails = ref(null);
 
 
 const openModal = async () => {
-  if (props.product && props.product.barcode) {
+  isModalOpen.value = true;
+  if (props.product.barcode) {
     productDetails.value = null; // Clear previous details
     try {
       productDetails.value = await fetchProductDetails(props.product.barcode);
-      isModalOpen.value = true; // Only open the modal after details are fetched
     } catch (error) {
       console.error('Failed to fetch product details:', error);
-      // Handle error (e.g., could show an error message or retry option)
     }
+  } else {
+    // Handle items without a barcode
+    productDetails.value = {
+      product_name: props.product.productName,
+      product_volume: props.product.productVolume,
+      product_description: props.product.productDescription,
+    };
   }
+};
+
+const openEditModal = () => {
+  emit('editItem', props.product);  // Assuming props.product holds the item details
 };
 
 const closeModal = () => {
@@ -75,67 +85,79 @@ defineExpose({
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
-      <div class="px-4">
-        <div class="flex flex-col items-center">
-          <h1 class="text-4xl py-4">{{ productDetails?.product_name || 'Item Name' }}</h1>
-          <img class="pb-4" :src="productDetails?.image_url || '../assets/img-placeholder.svg'" alt="image">
-        </div>
-        <ion-button v-if="props.addItem && props.openedByScan" @click="handleAddItem">Add to List</ion-button>
-        <div class="flex flex-col pb-4">
-          <span>Category: {{ productDetails?.categories || 'Category' }}</span>
-        </div>
-        <div class="justify-center px-16 pb-4">
-<!--          <img :src="productDetails?.nutrition_grades_tags ? `../assets/nutri_score/Nutri-score-${productDetails.nutrition_grades_tags[0]}.png` : '../assets/nutri_score/Nutri-score-placeholder.png`" alt="Nutri"/>-->
-        </div>
-        <div class="flex flex-col pb-4">
-          <div class="flex justify-center text-3xl">
-            <span>Zutaten</span>
+      <div v-if="props.product.barcode">
+        <div class="px-4">
+          <div class="flex flex-col items-center">
+            <h1 class="text-4xl py-4">{{ productDetails?.product_name || 'Item Name' }}</h1>
+            <img class="pb-4" :src="productDetails?.image_url || '../assets/img-placeholder.svg'" alt="image">
           </div>
-          <span>{{ productDetails?.ingredients_text || 'Lorem ipsum dolor sit amet...' }}</span>
-        </div>
+          <ion-button v-if="props.addItem && props.openedByScan" @click="handleAddItem">Add to List</ion-button>
+          <div class="flex flex-col pb-4">
+            <span>Category: {{ productDetails?.categories || 'Category' }}</span>
+          </div>
+          <div class="justify-center px-16 pb-4">
+            <!--          <img :src="productDetails?.nutrition_grades_tags ? `../assets/nutri_score/Nutri-score-${productDetails.nutrition_grades_tags[0]}.png` : '../assets/nutri_score/Nutri-score-placeholder.png`" alt="Nutri"/>-->
+          </div>
+          <div class="flex flex-col pb-4">
+            <div class="flex justify-center text-3xl">
+              <span>Zutaten</span>
+            </div>
+            <span>{{ productDetails?.ingredients_text || 'Lorem ipsum dolor sit amet...' }}</span>
+          </div>
 
-        <div class="pb-8">
-          <div class="flex justify-between">
-            <span>Nährwertangaben</span>
-            <span>Pro 100g</span>
+          <div class="pb-8">
+            <div class="flex justify-between">
+              <span>Nährwertangaben</span>
+              <span>Pro 100g</span>
+            </div>
+            <hr class="my-2">
+            <div class="flex justify-between">
+              <span>Energie</span>
+              <span>{{ productDetails?.nutriments?.energy_kcal_100g || 'N/A' }} kcal</span>
+            </div>
+            <hr class="my-2">
+            <div class="flex justify-between">
+              <span>Fett</span>
+              <span>{{ productDetails?.nutriments?.fat_100g || 'N/A' }} g</span>
+            </div>
+            <hr class="my-2">
+            <div class="flex justify-between">
+              <span>Gesättigte Fettsäuren</span>
+              <span>{{ productDetails?.nutriments?.saturated_fat_100g || 'N/A' }} g</span>
+            </div>
+            <hr class="my-2">
+            <div class="flex justify-between">
+              <span>Kohlenhydrate</span>
+              <span>{{ productDetails?.nutriments?.carbohydrates_100g || 'N/A' }} g</span>
+            </div>
+            <hr class="my-2">
+            <div class="flex justify-between">
+              <span>Zucker</span>
+              <span>{{ productDetails?.nutriments?.sugars_100g || 'N/A' }} g</span>
+            </div>
+            <hr class="my-2">
+            <div class="flex justify-between">
+              <span>Eiweiß</span>
+              <span>{{ productDetails?.nutriments?.proteins_100g || 'N/A' }} g</span>
+            </div>
+            <hr class="my-2">
+            <div class="flex justify-between">
+              <span>Salz</span>
+              <span>{{ productDetails?.nutriments?.salt_100g || 'N/A' }} g</span>
+            </div>
           </div>
-          <hr class="my-2">
-          <div class="flex justify-between">
-            <span>Energie</span>
-            <span>{{ productDetails?.nutriments?.energy_kcal_100g || 'N/A' }} kcal</span>
-          </div>
-          <hr class="my-2">
-          <div class="flex justify-between">
-            <span>Fett</span>
-            <span>{{ productDetails?.nutriments?.fat_100g || 'N/A' }} g</span>
-          </div>
-          <hr class="my-2">
-          <div class="flex justify-between">
-            <span>Gesättigte Fettsäuren</span>
-            <span>{{ productDetails?.nutriments?.saturated_fat_100g || 'N/A' }} g</span>
-          </div>
-          <hr class="my-2">
-          <div class="flex justify-between">
-            <span>Kohlenhydrate</span>
-            <span>{{ productDetails?.nutriments?.carbohydrates_100g || 'N/A' }} g</span>
-          </div>
-          <hr class="my-2">
-          <div class="flex justify-between">
-            <span>Zucker</span>
-            <span>{{ productDetails?.nutriments?.sugars_100g || 'N/A' }} g</span>
-          </div>
-          <hr class="my-2">
-          <div class="flex justify-between">
-            <span>Eiweiß</span>
-            <span>{{ productDetails?.nutriments?.proteins_100g || 'N/A' }} g</span>
-          </div>
-          <hr class="my-2">
-          <div class="flex justify-between">
-            <span>Salz</span>
-            <span>{{ productDetails?.nutriments?.salt_100g || 'N/A' }} g</span>
-          </div>
-        </div>
 
+        </div>
+      </div>
+      <div v-else class="flex flex-col items-center">
+        <span class="text-4xl py-4"> {{ productDetails?.product_name }} </span>
+        <span class="text-xl">Inhalt:</span>
+        <span>{{ productDetails?.product_volume }}</span>
+        <span class="text-xl pt-4">Beschreibung</span>
+        <span>{{ productDetails?.product_description }}</span>
+        <button class="bg-confirmButton text-white rounded-[24px] w-[161px] h-[35px] mt-8">
+          <span>Bearbeiten</span>
+        </button>
       </div>
     </ion-content>
   </ion-modal>
