@@ -49,12 +49,13 @@ const saveOrUpdateProduct = async () => {
   };
 
   try {
-    if (itemData.id) {
+    if (props.item?.id) {
       await updateItemInGroup(groupId.value, itemData);
+      emit('itemUpdated', itemData);
     } else {
-      await addItemToGroup(groupId.value, itemData);
+      const newItem = await addItemToGroup(groupId.value, itemData);
+      emit('itemAdded', newItem);
     }
-    emit('update', itemData);
     closeModal();
   } catch (error) {
     console.error('Failed to save or update product:', error);

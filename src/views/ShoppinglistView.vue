@@ -184,7 +184,7 @@ const checkAndStartScan = async () => {
       return;
     }
   }
-  startScan();
+  await startScan();
 };
 
 onMounted(async () => {
