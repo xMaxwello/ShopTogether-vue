@@ -3,6 +3,8 @@ import { ref, watch } from 'vue';
 import { IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonContent } from '@ionic/vue';
 import { defineExpose, defineProps } from 'vue';
 import { fetchProductDetails } from '@/services/openFoodFactsService';
+import ManualAddModal from '@/components/ManualAddModal.vue';
+
 
 const props = defineProps({
   product: {
@@ -67,6 +69,20 @@ watch(() => props.product, (newProduct, oldProduct) => {
     fetchDetails(newProduct.barcode);
   }
 });
+
+
+const isManualAddModalOpen = ref(false);
+const currentEditingItem = ref(null);
+
+const openManualAddModal = (item) => {
+  currentEditingItem.value = item;
+  isManualAddModalOpen.value = true;
+};
+
+const closeManualAddModal = () => {
+  isManualAddModalOpen.value = false;
+  currentEditingItem.value = null;
+};
 
 defineExpose({
   openModal,
@@ -155,10 +171,16 @@ defineExpose({
         <span>{{ productDetails?.product_volume }}</span>
         <span class="text-xl pt-4">Beschreibung</span>
         <span>{{ productDetails?.product_description }}</span>
-        <button class="bg-confirmButton text-white rounded-[24px] w-[161px] h-[35px] mt-8">
+        <button @click="openManualAddModal(props.product)" class="bg-confirmButton text-white rounded-[24px] w-[161px] h-[35px] mt-8">
           <span>Bearbeiten</span>
         </button>
       </div>
+
+      <ManualAddModal
+          :isOpen="isManualAddModalOpen"
+          :item="currentEditingItem"
+          @close="closeManualAddModal"
+      />
     </ion-content>
   </ion-modal>
 </template>
