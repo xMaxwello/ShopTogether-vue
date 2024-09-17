@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword , signInWithEmailAndPassword ,signOut, onAuthStateChanged } from 'firebase/auth';
+import { createUserWithEmailAndPassword , signInWithEmailAndPassword ,signOut, onAuthStateChanged, setPersistence, browserLocalPersistence } from 'firebase/auth';
 import {doc, setDoc, onSnapshot, getDoc} from 'firebase/firestore';
 import { auth, db } from '../../firebaseConfig';
 import type { User } from '@/models/myUser';
@@ -22,25 +22,31 @@ const registerUser = async (email: string, password: string, firstName: string, 
         await setDoc(doc(db, 'users', user.uid), userData);
 
         return userData;
-    } catch (error) {
+    } catch (error: any) {
         throw new Error(error.message);
     }
 };
 
 const loginUser = async (email: string, password: string): Promise<User> => {
     try {
+        await setPersistence(auth, browserLocalPersistence);
+
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
+        const idToken = await user.getIdToken();
+        localStorage.setItem('userToken', idToken);
+
         const userDocRef = doc(db, 'users', user.uid);
         const userDocSnap = await getDoc(userDocRef);
+
         if (!userDocSnap.exists()) {
             throw new Error('User document not found');
         }
 
         const userData = userDocSnap.data() as User;
         return userData;
-    } catch (error) {
+    } catch (error: any) {
         throw new Error(error.message);
     }
 };
@@ -67,7 +73,7 @@ const getCurrentUser = () => {
 const logoutUser = async () => {
     try {
         await signOut(auth);
-    } catch (error) {
+    } catch (error: any) {
         throw new Error(error.message);
     }
 };

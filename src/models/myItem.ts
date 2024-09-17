@@ -3,7 +3,6 @@ export interface Item {
     barcode: string;
     productCount: number;
     productDescription: string;
-    productID: string;
     productName: string;
     productImageUrl: string;
     productVolume: string;

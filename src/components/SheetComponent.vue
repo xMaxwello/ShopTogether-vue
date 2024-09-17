@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, nextTick } from 'vue';
 import { IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonContent } from '@ionic/vue';
 import { defineExpose, defineProps } from 'vue';
 import { fetchProductDetails } from '@/services/openFoodFactsService';
 import ManualAddModal from '@/components/ManualAddModal.vue';
-
 
 const props = defineProps({
   product: {
@@ -16,33 +15,36 @@ const props = defineProps({
   openedByScan: Boolean
 });
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'editItem']);
 
 const isModalOpen = ref(false);
 const productDetails = ref(null);
 
-
 const openModal = async () => {
-  isModalOpen.value = true;
+  // Clear previous details
+  productDetails.value = null;
+
+  if (!props.product) {
+    console.error("Product data is not available");
+    return;
+  }
+
   if (props.product.barcode) {
-    productDetails.value = null; // Clear previous details
     try {
       productDetails.value = await fetchProductDetails(props.product.barcode);
     } catch (error) {
       console.error('Failed to fetch product details:', error);
     }
   } else {
-    // Handle items without a barcode
     productDetails.value = {
       product_name: props.product.productName,
       product_volume: props.product.productVolume,
       product_description: props.product.productDescription,
     };
   }
-};
 
-const openEditModal = () => {
-  emit('editItem', props.product);  // Assuming props.product holds the item details
+  await nextTick(); // Ensure Vue updates the DOM before opening the modal
+  isModalOpen.value = true;
 };
 
 const closeModal = () => {
@@ -50,26 +52,17 @@ const closeModal = () => {
   emit('close');
 };
 
-const fetchDetails = async (barcode) => {
-  try {
-    productDetails.value = await fetchProductDetails(barcode);
-  } catch (error) {
-    console.error('Failed to fetch product details:', error);
-  }
+const openEditModal = () => {
+  emit('editItem', props.product);
 };
 
-const handleAddItem = () => {
-  props.addItem(props.product);
-  closeModal();
-};
-
-watch(() => props.product, (newProduct, oldProduct) => {
-  if (newProduct && newProduct.barcode !== oldProduct?.barcode) {
-    productDetails.value = null;
-    fetchDetails(newProduct.barcode);
+// Watch for changes in the product and refresh details
+watch(() => props.product, async (newProduct, oldProduct) => {
+  if (newProduct && newProduct !== oldProduct) {
+    productDetails.value = null; // Clear previous details immediately
+    await openModal(); // Fetch and show the new product details
   }
 });
-
 
 const isManualAddModalOpen = ref(false);
 const currentEditingItem = ref(null);

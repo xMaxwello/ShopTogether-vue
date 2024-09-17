@@ -8,7 +8,7 @@ const updateUserProfile = async (uid: string, firstName: string, lastName: strin
         console.log(`Updating user profile: UID=${uid}, FirstName=${firstName}, LastName=${lastName}`);
         const userDocRef = doc(db, 'users', uid);
         await updateDoc(userDocRef, { firstName, lastName });
-    } catch (error) {
+    } catch (error: any) {
         throw new Error(error.message);
     }
 };
@@ -18,7 +18,7 @@ const reauthenticateUser = async (currentEmail: string, password: string) => {
     const credential = EmailAuthProvider.credential(currentEmail, password);
     try {
         await reauthenticateWithCredential(user, credential);
-    } catch (error) {
+    } catch (error: any) {
         throw new Error('Reauthentication failed: ' + error.message);
     }
 };
@@ -33,7 +33,7 @@ const updateUserEmail = async (newEmail: string) => {
         await updateEmail(user, newEmail);
         await sendEmailVerification(user);
         alert('Verification email sent to the new email address. Please verify to complete the email update.');
-    } catch (error) {
+    } catch (error: any) {
         throw new Error('Email update failed: ' + error.message);
     }
 };
@@ -44,7 +44,7 @@ const updateUserPassword = async (currentEmail: string, currentPassword: string,
     try {
         await reauthenticateWithCredential(user, credential);
         await updatePassword(user, newPassword);
-    } catch (error) {
+    } catch (error: any) {
         throw new Error('Password update failed: ' + error.message);
     }
 };
@@ -60,7 +60,7 @@ const deleteUserAccount = async (currentEmail: string, password: string) => {
         await deleteDoc(userDocRef);
 
         await deleteUser(user);
-    } catch (error) {
+    } catch (error: any) {
         throw new Error('Account deletion failed: ' + error.message);
     }
 };

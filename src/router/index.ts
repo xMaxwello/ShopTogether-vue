@@ -8,10 +8,7 @@ import SettingsView from "@/views/SettingsView.vue";
 import AccountView from "@/views/AccountView.vue";
 
 const routes: Array<RouteRecordRaw> = [
-  {
-    path: '/',
-    redirect: '/login'
-  },
+
   {
     path: '/login',
     name: 'Login',
