@@ -1,20 +1,13 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import {ref, onMounted, computed} from 'vue';
 import { getCurrentUser } from '@/services/authService';
+import accountStore from "@/stores/accountStore";
 
-const user = ref({ firstName: '', lastName: '' });
+const user = computed(() => accountStore.state.user);
 
-const fetchUser = async () => {
-  try {
-    const userData = await getCurrentUser();
-    user.value = userData;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
+// Fetch user data when component mounts
 onMounted(() => {
-  fetchUser();
+  accountStore.fetchUserData();
 });
 </script>
 
